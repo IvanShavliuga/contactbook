@@ -1,32 +1,32 @@
 <template>
-  <ul>
-    <li>Пока нет контактов</li>
-  </ul>
+  <article class="contacts">
+    <p class="contacts__nomessage" v-if="!list.length">Пока нет контактов</p>
+    <User v-for="(l,k) in list" :user="l" :key="k"/>
+  </article>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import User from './User.vue'
 export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
+  name: 'ContactList',
+  computed: {
+    ...mapGetters(['types', 'list'])
+  },
+  components: {
+    User
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+.contacts {
+  border: 1px solid #ccc;
+  padding: 5px;
+  background: white;
+  &____nomessage {
+    color: red;
+  }
 }
 </style>
