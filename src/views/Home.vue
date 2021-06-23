@@ -1,12 +1,25 @@
 <template>
   <div class="home">
-    <h1 class="home__header">
+    <h2 class="home__header">
       Список контактов
-    </h1>
+    </h2>
     <ContactList/>
   </div>
 </template>
-
+<style lang="less">
+@import './../assets/vars.less';
+.home {
+  width: 90%;
+  margin: 0 auto;
+  &__header {
+    font-family: @fonttitle;
+    font-size: 25px;
+    @media (max-width: 481px) {
+      font-size: 15px;
+    }
+  }
+}
+</style>
 <script>
 // @ is an alias to /src
 import ContactList from '@/components/ContactList.vue'
