@@ -14,6 +14,9 @@
   &__header {
     font-family: @fonttitle;
     font-size: 25px;
+    @media (max-width: 481px) {
+      font-size: 15px;
+    }
   }
 }
 </style>

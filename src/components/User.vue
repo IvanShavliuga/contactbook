@@ -33,6 +33,7 @@
 </template>
 <style scoped lang="less">
 @import './../assets/vars.less';
+@import './../assets/mixins.less';
 .user {
   list-style: none;
   margin: 0;
@@ -52,13 +53,7 @@
     text-align: right;
     margin-right: 5px;
     &-button {
-      display: inline-block;
-      background-color: transparent;
-      color: purple;
-      border: 1px solid purple;
-      margin: 0 5px;
-      padding: 0 5px;
-      outline: none;
+      .button();
     }
   }
   &__contacts {

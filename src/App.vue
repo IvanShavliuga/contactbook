@@ -47,6 +47,9 @@ body, html {
     &-last {
       color: #306ec0;
     }
+    @media (max-width: 357px) {
+      font-size: 15px;
+    }
   }
   &__nav {
     padding: 5px 30px;
@@ -60,6 +63,9 @@ body, html {
       padding: 0 10px;
       &.router-link-exact-active {
         color: @menuactive;
+      }
+      @media (max-width: 481px) {
+        font-size: 15px;
       }
     }
   }

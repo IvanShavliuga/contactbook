@@ -11,6 +11,7 @@ export default new Vuex.Store({
       'phone'
     ],
     select: null,
+    restore: null,
     list: [{
       id: 1,
       name: 'iv2',
@@ -69,10 +70,7 @@ export default new Vuex.Store({
         return el.id === obj.id
       })
       const arr = state.list.splice(ind, 1)
-      console.log(obj.id)
-      console.log(ind)
-      console.log(state.list)
-      console.log(arr)
+      state.restore = arr
     }
   },
   actions: {
@@ -89,6 +87,7 @@ export default new Vuex.Store({
   getters: {
     types: state => state.types,
     list: state => state.list,
-    select: state => state.select
+    select: state => state.select,
+    restore: state => state.restore
   }
 })
