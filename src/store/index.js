@@ -83,9 +83,7 @@ export default new Vuex.Store({
       state.restore = obj
     },
     ADD_CONTACT (state, obj) {
-      const dta = {
-        ...obj
-      }
+      const dta = { ...obj }
       dta.id = state.list.length + 1
       state.list.push(dta)
       state.select = null

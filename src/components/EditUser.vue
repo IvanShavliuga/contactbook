@@ -161,7 +161,14 @@ export default {
       })
     },
     saveContact () {
-      console.log('save start')
+      /* удаление повтрояющихся элементов */
+      let arr = this.user.contacts
+      arr = arr.filter((thing, index, self) =>
+        index === self.findIndex((t) => (
+          t.link === thing.link && t.type === thing.type
+        ))
+      )
+      this.user.contacts = arr
       if (this.mode === 'edit') {
         const sdta = { ...this.user, show: true, id: this.select.id }
         this.$store.dispatch('saveContact', sdta)
