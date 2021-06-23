@@ -10,6 +10,7 @@ export default new Vuex.Store({
       'email',
       'phone'
     ],
+    select: null,
     list: [{
       id: 1,
       name: 'iv2',
@@ -51,15 +52,30 @@ export default new Vuex.Store({
         return el.id === obj.id
       })
       state.list[ind].show = !state.list[ind].show
+    },
+    SELECT_ITEM (state, obj) {
+      const ind = state.list.findIndex((el) => {
+        return el.id === obj.id
+      })
+      const dta = {
+        name: state.list[ind].name,
+        show: state.list[ind].show,
+        contacts: state.list[ind].contacts
+      }
+      state.select = dta
     }
   },
   actions: {
     showItem ({ commit }, obj) {
       commit('SHOW_ITEM', obj)
+    },
+    selectItem ({ commit }, obj) {
+      commit('SELECT_ITEM', obj)
     }
   },
   getters: {
     types: state => state.types,
-    list: state => state.list
+    list: state => state.list,
+    select: state => state.select
   }
 })

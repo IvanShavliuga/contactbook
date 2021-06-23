@@ -5,11 +5,14 @@
       <span class="user__control">
         <button
           class="user__control-button"
-          @click="show">
+          @click="show"
+        >
           {{ user.show?'hide':'show' }}
         </button>
           <button
-          class="user__control-button">
+          class="user__control-button"
+          @click="select"
+        >
           Edit
         </button>
           <button
@@ -87,6 +90,11 @@ export default {
     show () {
       console.log('show')
       this.$store.dispatch('showItem', { id: this.user.id })
+    },
+    select () {
+      console.log('select')
+      this.$store.dispatch('selectItem', { id: this.user.id })
+      this.$router.push('/view')
     }
   }
 }
