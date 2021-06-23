@@ -1,8 +1,22 @@
 <template>
   <article class="contacts">
-    <p class="contacts__nomessage" v-if="!list.length">Пока нет контактов</p>
-    <Modal v-if="modalShow" @yes="yesclick" @no="noclick"/>
-    <User v-for="(l,k) in list" :user="l" :key="k" @deleteItem="del"/>
+    <p
+      class="contacts__nomessage"
+      v-if="!list.length"
+    >
+      Пока нет контактов
+    </p>
+    <Modal
+      v-if="modalShow"
+      @yes="yesclick"
+      @no="noclick"
+    />
+    <User
+      v-for="(l,k) in list"
+      :user="l"
+      :key="k"
+      @deleteItem="del"
+    />
   </article>
 </template>
 

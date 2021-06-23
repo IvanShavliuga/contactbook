@@ -1,6 +1,5 @@
 <template>
   <div class="view">
-    <h1 class="view__header">Редактирование контакта</h1>
     <EditUser/>
   </div>
 </template>

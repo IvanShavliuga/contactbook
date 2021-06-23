@@ -61,7 +61,8 @@ export default new Vuex.Store({
       const dta = {
         name: state.list[ind].name,
         show: state.list[ind].show,
-        contacts: state.list[ind].contacts
+        contacts: state.list[ind].contacts,
+        id: obj.id
       }
       state.select = dta
     },
@@ -71,6 +72,25 @@ export default new Vuex.Store({
       })
       const arr = state.list.splice(ind, 1)
       state.restore = arr
+    },
+    SAVE_CONTACT (state, obj) {
+      const ind = state.list.findIndex((el) => {
+        return el.id === obj.id
+      })
+      console.log(obj)
+      state.list[ind] = obj
+      state.select = null
+      state.restore = obj
+    },
+    ADD_CONTACT (state, obj) {
+      const dta = {
+        ...obj
+      }
+      dta.id = state.list.length + 1
+      state.list.push(dta)
+      state.select = null
+      state.restore = dta
+      console.log(dta)
     }
   },
   actions: {
@@ -82,6 +102,12 @@ export default new Vuex.Store({
     },
     deleteItem ({ commit }, obj) {
       commit('DELETE_ITEM', obj)
+    },
+    saveContact ({ commit }, obj) {
+      commit('SAVE_CONTACT', obj)
+    },
+    addContact ({ commit }, obj) {
+      commit('ADD_CONTACT', obj)
     }
   },
   getters: {

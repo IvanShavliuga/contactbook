@@ -1,7 +1,7 @@
 <template>
   <ul class="user">
     <li class="user__name">
-      <span>{{ user.name }}</span>
+      <span>#{{ user.id }} {{ user.name }}</span>
       <span class="user__control">
         <button
           class="user__control-button"
