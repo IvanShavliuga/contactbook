@@ -32,6 +32,10 @@ body, html {
     width: 80%;
     height: 100vh;
     background-color: @wrappercolor;
+    @media (max-width: 900px) {
+      margin: 0;
+      width: 100%;
+    }
   }
   &__logo {
     margin: 0 auto;

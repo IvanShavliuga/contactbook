@@ -1,11 +1,13 @@
 <template>
-<form class="useredit">
+<form class="useredit" @input="resetflag">
   <Modal
     v-if="msgid+1"
     @yes="yesclick"
     @no="noclick"
     msg="Действительно откатить измения?"
   />
+  <p v-if="saveflag" class="useredit__message">Текущие изменения сохранены</p>
+  <p v-if="restoreflag" class="useredit__message">Предыдущие изменения восстановлены</p>
   <fieldset class="useredit__block">
     <legend class="useredit__block-legend">
       Имя
@@ -13,7 +15,6 @@
     <input
       class="useredit__block-input"
       type="text"
-      @input="modflag"
       v-model="user.name"
     />
   </fieldset>
@@ -36,9 +37,17 @@
       </button>
       <button
         class="useredit__block-button"
-        @click.prevent="restoreitem"
+        @click.prevent="undoitem"
+        :disabled="!undo"
       >
         Отменить
+      </button>
+      <button
+        class="useredit__block-button"
+        @click.prevent="restoreclick"
+        :disabled="!restore"
+      >
+        Шаг назад
       </button>
     </div>
     <p v-if="!user.contacts.length">
@@ -52,7 +61,6 @@
       <select
         class="useredit__block-type"
         type="text"
-        @input="modflag"
         v-model="c.type"
       >
         <option
@@ -65,7 +73,6 @@
       <input
         class="useredit__block-link"
         type="text"
-        @input="modflag"
         v-model="c.link"
       />
       <button
@@ -81,6 +88,11 @@
 <style lang="less">
 @import './../assets/mixins.less';
 .useredit {
+  &__message {
+    background: tomato;
+    color: yellow;
+    padding: 5px 15px;
+  }
   &__block {
     width: 90%;
     margin: 5px auto;
@@ -142,7 +154,8 @@ export default {
         contacts: []
       },
       mode: 'add',
-      modifed: false,
+      saveflag: false,
+      restoreflag: false,
       msgid: -1,
       iddel: -1,
       messages: ['Действительно удалить контакт?', 'Действительно откатить измения?']
@@ -170,7 +183,9 @@ export default {
       this.user.name = 'Anonimus'
       this.user.contacts = []
       this.mode = 'add'
+      this.$store.dispatch('clearHistory')
     }
+    this.saveflag = false
   },
   methods: {
     modflag () {
@@ -191,7 +206,6 @@ export default {
     },
     saveContact () {
       /* удаление повтрояющихся элементов */
-      localStorage.setItem('contactbookedit', false)
       let arr = this.user.contacts
       arr = arr.filter((thing, index, self) =>
         index === self.findIndex((t) => (
@@ -207,7 +221,9 @@ export default {
         console.log(sdta)
         this.$store.dispatch('addContact', sdta)
       }
-      this.$router.push('/')
+      this.saveflag = true
+      this.restoreflag = false
+      // this.$router.push('/')
     },
     yesclick () {
       console.log('yes')
@@ -215,31 +231,38 @@ export default {
         this.modifed = true
         this.user.contacts.splice(this.iddel, 1)
       }
+      if (this.msgid === 1) {
+        if (this.undo) {
+          this.$store.dispatch('undoContact')
+          this.user.name = this.select.name
+          this.user.contacts = []
+          for (const c of this.select.contacts) {
+            this.user.contacts.push({
+              type: c.type,
+              link: c.link
+            })
+          }
+        }
+      }
       this.msgid = -1
     },
     noclick () {
       console.log('no')
       this.msgid = -1
     },
-    restoreitem () {
-      console.log('restore')
-      if (this.undo) {
-        this.$store.dispatch('undoContact')
-        this.user.name = this.select.name
-        this.user.contacts = []
-        for (const c of this.select.contacts) {
-          this.user.contacts.push({
-            type: c.type,
-            link: c.link
-          })
-        }
-      }
-    }
-  },
-  watch: {
-    user () {
-      this.modifed = true
-      console.log(this.modifed)
+    undoitem () {
+      this.msgid = 1
+    },
+    restoreclick () {
+      console.log('start restore')
+      this.saveflag = false
+      this.restoreflag = true
+      this.$store.dispatch('restoreContact')
+      this.user = { ...this.select }
+    },
+    resetflag () {
+      this.saveflag = false
+      this.restoreflag = false
     }
   }
 }

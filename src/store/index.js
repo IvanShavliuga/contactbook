@@ -11,6 +11,7 @@ export default new Vuex.Store({
       'phone'
     ],
     select: null,
+    idselect: -1,
     undo: null,
     restore: null,
     list: [{
@@ -67,6 +68,10 @@ export default new Vuex.Store({
       }
       state.select = dta
       state.undo = dta
+      if (!state.restore) {
+        state.restore = dta
+      }
+      state.idselect = ind
     },
     DELETE_ITEM (state, obj) {
       const ind = state.list.findIndex((el) => {
@@ -81,8 +86,8 @@ export default new Vuex.Store({
       })
       console.log(obj)
       state.list[ind] = obj
+      state.undo = null
       state.select = null
-      state.restore = obj
     },
     ADD_CONTACT (state, obj) {
       const dta = { ...obj }
@@ -95,10 +100,18 @@ export default new Vuex.Store({
     UNDO_CONTACT (state) {
       state.select = { ...state.undo }
       console.log(state.select)
-      state.undo = null
     },
     CLEAR_SELECT (state) {
       state.select = null
+      state.idselect = -1
+    },
+    CLEAR_HISTORY (state) {
+      state.restore = null
+    },
+    RESTORE_CONTACT (state) {
+      state.list[state.idselect] = { ...state.restore }
+      state.select = { ...state.restore }
+      state.restore = null
     }
   },
   actions: {
@@ -120,8 +133,14 @@ export default new Vuex.Store({
     undoContact ({ commit }) {
       commit('UNDO_CONTACT')
     },
+    restoreContact ({ commit }) {
+      commit('RESTORE_CONTACT')
+    },
     clearSelect ({ commit }) {
       commit('CLEAR_SELECT')
+    },
+    clearHistory ({ commit }) {
+      commit('CLEAR_HISTORY')
     }
   },
   getters: {

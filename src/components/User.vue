@@ -7,19 +7,19 @@
           class="user__control-button"
           @click="show"
         >
-          {{ user.show?'hide':'show' }}
+          {{ user.show?'Скрыть':'Показать' }}
         </button>
         <button
           class="user__control-button"
           @click="select"
         >
-          Edit
+          Править
         </button>
         <button
           class="user__control-button"
           @click="delitem"
         >
-          Delete
+          Удалить
         </button>
       </span>
     </li>
@@ -45,6 +45,9 @@
         font-weight: bold;
         width: 65%;
         padding: 5px 0;
+        @media (max-width: 900px) {
+          width: 50%;
+        }
       }
     }
   }
@@ -66,6 +69,7 @@
         display: inline-block;
         &:first-child {
           width: 100px;
+          color: blue;
         }
         &:last-child {
           font-style: italic;
