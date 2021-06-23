@@ -63,6 +63,16 @@ export default new Vuex.Store({
         contacts: state.list[ind].contacts
       }
       state.select = dta
+    },
+    DELETE_ITEM (state, obj) {
+      const ind = state.list.findIndex((el) => {
+        return el.id === obj.id
+      })
+      const arr = state.list.splice(ind, 1)
+      console.log(obj.id)
+      console.log(ind)
+      console.log(state.list)
+      console.log(arr)
     }
   },
   actions: {
@@ -71,6 +81,9 @@ export default new Vuex.Store({
     },
     selectItem ({ commit }, obj) {
       commit('SELECT_ITEM', obj)
+    },
+    deleteItem ({ commit }, obj) {
+      commit('DELETE_ITEM', obj)
     }
   },
   getters: {

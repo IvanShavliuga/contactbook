@@ -9,14 +9,16 @@
         >
           {{ user.show?'hide':'show' }}
         </button>
-          <button
+        <button
           class="user__control-button"
           @click="select"
         >
           Edit
         </button>
-          <button
-          class="user__control-button">
+        <button
+          class="user__control-button"
+          @click="delitem"
+        >
           Delete
         </button>
       </span>
@@ -90,6 +92,10 @@ export default {
     show () {
       console.log('show')
       this.$store.dispatch('showItem', { id: this.user.id })
+    },
+    delitem () {
+      console.log('delitem')
+      this.$emit('deleteItem', { id: this.user.id })
     },
     select () {
       console.log('select')
