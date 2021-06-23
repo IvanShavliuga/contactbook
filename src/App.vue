@@ -72,3 +72,14 @@ body, html {
 }
 
 </style>
+<script>
+export default {
+  watch: {
+    $route () {
+      if (this.$route.path === '/') {
+        this.$store.dispatch('clearSelect')
+      }
+    }
+  }
+}
+</script>

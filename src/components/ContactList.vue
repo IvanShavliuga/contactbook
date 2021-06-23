@@ -10,6 +10,7 @@
       v-if="modalShow"
       @yes="yesclick"
       @no="noclick"
+      msg="Действительно удалить контакт?"
     />
     <User
       v-for="(l,k) in list"

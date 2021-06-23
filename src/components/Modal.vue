@@ -2,7 +2,7 @@
 <div class="modal">
   <div class="modal__box">
     <h2 class="modal__header">Вы подтверждаете</h2>
-    <p class="modal__text">Действительно удалить контакт?</p>
+    <p class="modal__text">{{ msg }}</p>
     <span class="modal__control">
       <button
         class="modal__control-button"
@@ -48,6 +48,12 @@
 </style>
 <script>
 export default {
+  props: {
+    msg: {
+      type: String,
+      required: true
+    }
+  },
   methods: {
     yesclick () {
       this.$emit('yes')

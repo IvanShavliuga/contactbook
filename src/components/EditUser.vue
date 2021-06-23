@@ -1,5 +1,11 @@
 <template>
 <form class="useredit">
+  <Modal
+    v-if="msgid+1"
+    @yes="yesclick"
+    @no="noclick"
+    msg="Действительно откатить измения?"
+  />
   <fieldset class="useredit__block">
     <legend class="useredit__block-legend">
       Имя
@@ -7,6 +13,7 @@
     <input
       class="useredit__block-input"
       type="text"
+      @input="modflag"
       v-model="user.name"
     />
   </fieldset>
@@ -29,6 +36,7 @@
       </button>
       <button
         class="useredit__block-button"
+        @click.prevent="restoreitem"
       >
         Отменить
       </button>
@@ -44,6 +52,7 @@
       <select
         class="useredit__block-type"
         type="text"
+        @input="modflag"
         v-model="c.type"
       >
         <option
@@ -56,10 +65,12 @@
       <input
         class="useredit__block-link"
         type="text"
+        @input="modflag"
         v-model="c.link"
       />
       <button
         class="useredit__block-button"
+        @click.prevent="delitem(k)"
       >
         Удалить
       </button>
@@ -122,6 +133,7 @@
 </style>
 <script>
 import { mapGetters } from 'vuex'
+import Modal from './Modal.vue'
 export default {
   data () {
     return {
@@ -129,13 +141,21 @@ export default {
         name: 'test new',
         contacts: []
       },
-      mode: 'add'
+      mode: 'add',
+      modifed: false,
+      msgid: -1,
+      iddel: -1,
+      messages: ['Действительно удалить контакт?', 'Действительно откатить измения?']
     }
   },
+  components: {
+    Modal
+  },
   computed: {
-    ...mapGetters(['select', 'restore', 'types'])
+    ...mapGetters(['select', 'undo', 'restore', 'types'])
   },
   created () {
+    localStorage.setItem('contactbookedit', true)
     if (this.select) {
       this.user.name = this.select.name
       this.user.contacts = []
@@ -153,8 +173,17 @@ export default {
     }
   },
   methods: {
+    modflag () {
+      this.modifed = true
+      console.log(this.restore)
+    },
+    delitem (id) {
+      this.msgid = 0
+      this.iddel = id
+    },
     addContact () {
       // const fl = this.user.contacts.filter(el => word.length > 6);
+      this.modflag()
       this.user.contacts.push({
         type: 'email',
         link: 'annonimus@test.tst'
@@ -162,6 +191,7 @@ export default {
     },
     saveContact () {
       /* удаление повтрояющихся элементов */
+      localStorage.setItem('contactbookedit', false)
       let arr = this.user.contacts
       arr = arr.filter((thing, index, self) =>
         index === self.findIndex((t) => (
@@ -178,6 +208,38 @@ export default {
         this.$store.dispatch('addContact', sdta)
       }
       this.$router.push('/')
+    },
+    yesclick () {
+      console.log('yes')
+      if (this.msgid === 0) {
+        this.modifed = true
+        this.user.contacts.splice(this.iddel, 1)
+      }
+      this.msgid = -1
+    },
+    noclick () {
+      console.log('no')
+      this.msgid = -1
+    },
+    restoreitem () {
+      console.log('restore')
+      if (this.undo) {
+        this.$store.dispatch('undoContact')
+        this.user.name = this.select.name
+        this.user.contacts = []
+        for (const c of this.select.contacts) {
+          this.user.contacts.push({
+            type: c.type,
+            link: c.link
+          })
+        }
+      }
+    }
+  },
+  watch: {
+    user () {
+      this.modifed = true
+      console.log(this.modifed)
     }
   }
 }

@@ -22,6 +22,11 @@ import EditUser from '@/components/EditUser.vue'
 export default {
   components: {
     EditUser
+  },
+  watch: {
+    $route () {
+      console.log('watch route ')
+    }
   }
 }
 </script>
